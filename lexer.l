@@ -31,7 +31,7 @@ while           { printf("(%s, %s)\n", KEYWORD, yytext); }
 [(){};]         { printf("(%s, %s)\n", DELIMITER, yytext); }
 \n              { /* 消耗换行符 */ }
 [ \t]           { /* 消耗空格和制表符 */ }
-\\$             { printf("(%s, %s)\n", EOF_SYMBOL, "$"); }
+\$             { printf("(%s, %s)\n", EOF_SYMBOL, "$"); }
 .               { printf("Invalid character %c\n", *yytext); }
 
 %%
