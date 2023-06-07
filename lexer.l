@@ -2,42 +2,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "bison.tab.h"
+
+int row_num=1;
+
 %}
 
-%option noyywrap
-
-%{
-// 定义符号类别的字符串常量
-#define KEYWORD "KEYWORD"
-#define IDENTIFIER "IDENTIFIER"
-#define CONSTANT "CONSTANT"
-#define OPERATOR "OPERATOR"
-#define CONDITION_OPERATOR "CONDITION_OPERATOR"
-#define DELIMITER "DELIMITER"
-#define EOF_SYMBOL "EOF"
-%}
 
 %%
 
-int             { printf("(%s, %s)\n", KEYWORD, yytext); }
-float           { printf("(%s, %s)\n", KEYWORD, yytext); }
-if              { printf("(%s, %s)\n", KEYWORD, yytext); }
-else            { printf("(%s, %s)\n", KEYWORD, yytext); }
-while           { printf("(%s, %s)\n", KEYWORD, yytext); }
-[a-zA-Z_][a-zA-Z0-9_]*    { printf("(%s, %s)\n", IDENTIFIER, yytext); }
-[0-9]+          { printf("(%s, %s)\n", CONSTANT, yytext); }
-[+\-*/=]        { printf("(%s, %s)\n", OPERATOR, yytext); }
-[<>]=?          { printf("(%s, %s)\n", CONDITION_OPERATOR, yytext); }
-[(){};]         { printf("(%s, %s)\n", DELIMITER, yytext); }
-\n              { /* 消耗换行符 */ }
+int             {  return INT;}
+float           {  return FLOAT;}
+if              {  return IF;}
+else            {  return ELSE;}
+while           {  return WHILE;}
+[a-zA-Z_][a-zA-Z0-9_]*    {  return IDENTIFIER;}
+[0-9]+          {  return CONSTANT;}
+[+\-]        {  return PLUS_MINUS;}
+[*/]        {  return TIMES_DIVIDE;}
+[=]        {  return EQUAL;}
+[<>]=?          {  return CONDITION_OPERATOR;}
+==          {  return CONDITION_OPERATOR;}
+[;]         { return SEMI;}
+[(]         { return LPAREN;}
+[)]         { return RPAREN;}
+[{]         { return LBPAREN;}
+[}]         { return RBPAREN;}
+\n              { row_num ++; }
 [ \t]           { /* 消耗空格和制表符 */ }
-\$             { printf("(%s, %s)\n", EOF_SYMBOL, "$"); }
-.               { printf("Invalid character %c\n", *yytext); }
+\$             { return EOF_SYMBOL; }
+.               { printf("Invalid character %c row:%d\n", *yytext,row_num); }
 
 %%
 
 
-int main() {
-    yylex();
-    return 0;
+//int main() {
+//    yylex();
+//    return 0;
+//}
+int yywrap(){
+	return 1;
 }
+
