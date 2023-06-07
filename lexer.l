@@ -28,6 +28,7 @@ while           { printf("(%s, %s)\n", KEYWORD, yytext); }
 [0-9]+          { printf("(%s, %s)\n", CONSTANT, yytext); }
 [+\-*/=]        { printf("(%s, %s)\n", OPERATOR, yytext); }
 [<>]=?          { printf("(%s, %s)\n", CONDITION_OPERATOR, yytext); }
+==          { printf("(%s, %s)\n", CONDITION_OPERATOR, yytext); }
 [(){};]         { printf("(%s, %s)\n", DELIMITER, yytext); }
 \n              { /* 消耗换行符 */ }
 [ \t]           { /* 消耗空格和制表符 */ }
